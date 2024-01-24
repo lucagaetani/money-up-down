@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:money_app_down/theme/theme.dart';
+import 'package:frontend/theme/theme.dart';
 
 class ThemeProvider with ChangeNotifier {
   ThemeData _themeData = lightMode;

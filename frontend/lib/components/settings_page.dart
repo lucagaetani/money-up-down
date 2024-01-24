@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:money_app_down/components/theme_provider.dart';
+import 'package:frontend/components/theme_provider.dart';
 import 'package:provider/provider.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -8,19 +8,25 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPage extends State<SettingsPage> {
-  bool light = true;
+  bool dark = true;
   @override
   Widget build(BuildContext context) {
 
     return Scaffold(
       appBar: 
         AppBar(title: Text("Settings")),
-      body: Switch(value: light, onChanged: (a) => {
+      body: GridView.count(
+        crossAxisCount: 2,
+        children: [
+          Switch(value: dark, onChanged: (a) => {
             Provider.of<ThemeProvider>(context, listen: false).toggleTheme(),
             setState(() {
-              light = !light;
+              dark = !dark;
             })
-          })
+          }),
+          Center(child: Text(dark ? "Disable dark mode" : "Enable dark mode"))
+        ],
+      )
     );
   }
 }

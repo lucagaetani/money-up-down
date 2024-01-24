@@ -1,9 +1,18 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
-import 'package:money_app_down/components/home_page.dart';
-import 'package:money_app_down/components/settings_page.dart';
+import 'package:frontend/components/home_page.dart';
+import 'package:frontend/components/settings_page.dart';
+import 'package:frontend/components/theme_provider.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+      ChangeNotifierProvider(
+        create: (context) => ThemeProvider(),
+        child: MyApp(),
+      ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -13,10 +22,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'MUPDN',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
+      theme: Provider.of<ThemeProvider>(context).themeData,
       home: const MyHomePage(),
     );
   }
@@ -55,7 +61,12 @@ class _MyHomePageState extends State<MyHomePage> {
             BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
             BottomNavigationBarItem(icon: Icon(Icons.settings), label: "Settings"),
           ],
+          selectedIconTheme: IconThemeData(color: Theme.of(context).colorScheme.tertiary),
+          showSelectedLabels: false,
+          showUnselectedLabels: false,
+          iconSize: 30,
           currentIndex: selectedIndex,
+          backgroundColor: Theme.of(context).colorScheme.secondary,
           onTap: (selectedIndex) => {changeIndex(selectedIndex)},
         )
       ],

@@ -40,6 +40,8 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     Widget page = HomePage();
+    Size size = MediaQuery.of(context).size;
+
     switch (selectedIndex) {
       case 0:
         page = HomePage();
@@ -51,12 +53,13 @@ class _MyHomePageState extends State<MyHomePage> {
       setState(() {
         selectedIndex = value;
       });
-    } 
+    }
     
     return Column(
       children: [
         Expanded(child: page),
         BottomNavigationBar(
+          
           items: const [
             BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
             BottomNavigationBarItem(icon: Icon(Icons.settings), label: "Settings"),

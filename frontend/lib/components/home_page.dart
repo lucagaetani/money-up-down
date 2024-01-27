@@ -18,7 +18,7 @@ class HomePage extends StatelessWidget {
               ElevatedButton(
                 style: style,
                 onPressed: () {
-                  Navigator.of(context).push(_createRoute());
+                  Navigator.of(context).push(_createRoute(1));
                 }, 
                 child: Icon(Icons.remove, size: 30.0, color: Theme.of(context).colorScheme.tertiary,)
               )),
@@ -27,7 +27,7 @@ class HomePage extends StatelessWidget {
               ElevatedButton(
                 style: style,
                 onPressed: () {
-                  Navigator.of(context).push(_createRoute());
+                  Navigator.of(context).push(_createRoute(0));
                 }, 
                 child: Icon(Icons.add, size: 30.0, color: Theme.of(context).colorScheme.tertiary,)
               )),
@@ -37,9 +37,9 @@ class HomePage extends StatelessWidget {
   }
 }
 
-Route _createRoute() {
+Route _createRoute(int value) {
   return PageRouteBuilder(
-    pageBuilder: (context, animation, secondaryAnimation) => AddRemovePage(),
+    pageBuilder: (context, animation, secondaryAnimation) => AddRemovePage(valueAddOrRemove: value),
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
       const begin = Offset(0.0, 1.0);
       const end = Offset.zero;

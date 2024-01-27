@@ -40,7 +40,6 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     Widget page = HomePage();
-    Size size = MediaQuery.of(context).size;
 
     switch (selectedIndex) {
       case 0:

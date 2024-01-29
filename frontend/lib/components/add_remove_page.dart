@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:frontend/components/category.dart';
+import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 
 class AddRemovePage extends StatefulWidget {
   final int valueAddOrRemove;
@@ -11,12 +14,28 @@ class AddRemovePage extends StatefulWidget {
 
 class _AddRemovePage extends State<AddRemovePage> {
   bool dark = true;
+  final CurrencyTextInputFormatter _formatter = CurrencyTextInputFormatter(
+    locale: 'eu',
+    decimalDigits: 2,
+    symbol: '€',
+  );
   @override
   Widget build(BuildContext context) {
 
     return Scaffold(
       appBar: 
-        AppBar(title: Text((widget.valueAddOrRemove == 0) ? "Add" : "Remove")),
+        AppBar(
+          title: Text((widget.valueAddOrRemove == 0) ? "Add" : "Remove"),
+          actions: [
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(),
+                onPressed: () {
+                 
+                }, 
+                child: widget.valueAddOrRemove == 0 ? Icon(Icons.add) : Icon(Icons.remove),
+            ),
+          ],
+        ),
       body: Column(
         children: [
           Padding(
@@ -24,8 +43,17 @@ class _AddRemovePage extends State<AddRemovePage> {
             child: TextFormField(
               decoration: const InputDecoration(
                 border: UnderlineInputBorder(),
-                labelText: 'How much?',
+                labelText: 'Amount',
               ),
+              inputFormatters: <TextInputFormatter>[
+                CurrencyTextInputFormatter(
+                  locale: 'eu',
+                  decimalDigits: 2,
+                  symbol: '€',
+                ),
+              ],
+              initialValue: _formatter.format('0.00'),
+              keyboardType: TextInputType.number,
             ),
           ),
           Padding(
@@ -37,71 +65,33 @@ class _AddRemovePage extends State<AddRemovePage> {
               ),
             ),
           ),
-          Text("Choose a category"),
+          Text("Choose a category", style: TextStyle(fontSize: 25),),
           SizedBox(height: 20),
           Expanded(
             child: GridView.count(
               crossAxisCount: 4,
+              crossAxisSpacing: 4,
+              mainAxisSpacing: 4,
               children: [
-                Container(
-                  decoration: BoxDecoration(
-                      shape: BoxShape.rectangle,
-                      color: Theme.of(context).colorScheme.secondary,
-                  ),
-                  child: Center(child: 
-                      Text("b", style: TextStyle(color: Colors.teal[800], fontSize: 40),
-                    )
-                  ),
+                Category(
+                  title: "Restaurant",
+                  color: Colors.teal[800],
+                  icon: Icons.restaurant,
                 ),
-                Container(
-                  decoration: BoxDecoration(
-                      shape: BoxShape.rectangle,
-                      color: Theme.of(context).colorScheme.secondary,
-                  ),
-                  child: Center(child: 
-                      Text("b", style: TextStyle(color: Colors.teal[800], fontSize: 40),
-                    )
-                  ),
+                Category(
+                  title: "Bills",
+                  color: Colors.red[800],
+                  icon: Icons.payments
                 ),
-                Container(
-                  decoration: BoxDecoration(
-                      shape: BoxShape.rectangle,
-                      color: Theme.of(context).colorScheme.secondary,
-                  ),
-                  child: Center(child: 
-                      Text("b", style: TextStyle(color: Colors.teal[800], fontSize: 40),
-                    )
-                  ),
+                Category(
+                  title: "Clothes",
+                  color: Colors.orange[800],
+                  icon: Icons.checkroom,
                 ),
-                Container(
-                  decoration: BoxDecoration(
-                      shape: BoxShape.rectangle,
-                      color: Theme.of(context).colorScheme.secondary,
-                  ),
-                  child: Center(child: 
-                      Text("b", style: TextStyle(color: Colors.teal[800], fontSize: 40),
-                    )
-                  ),
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                      shape: BoxShape.rectangle,
-                      color: Theme.of(context).colorScheme.secondary,
-                  ),
-                  child: Center(child: 
-                      Text("b", style: TextStyle(color: Colors.teal[800], fontSize: 40),
-                    )
-                  ),
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                      shape: BoxShape.rectangle,
-                      color: Theme.of(context).colorScheme.secondary,
-                  ),
-                  child: Center(child: 
-                      Text("b", style: TextStyle(color: Colors.teal[800], fontSize: 40),
-                    )
-                  ),
+                Category(
+                  title: "Entertainment",
+                  color: Colors.brown[800],
+                  icon: Icons.local_bar,
                 ),
               ],
             ),

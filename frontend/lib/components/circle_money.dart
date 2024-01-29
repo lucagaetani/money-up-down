@@ -12,15 +12,19 @@ class _CircleMoney extends State<CircleMoney> {
 
     return Container(
       width: 220,
-      height: 180,
+      height: 220,
+      padding: EdgeInsets.all(10),
       decoration: BoxDecoration(
-          shape: BoxShape.rectangle,
+          shape: BoxShape.circle,
           color: Theme.of(context).colorScheme.secondary,
       ),
-      child: Center(child: 
-          Text("b", style: TextStyle(color: Colors.teal[800], fontSize: 40),
-        )
-      ),
+      child: Center(
+        child: 
+          FittedBox(
+            fit: BoxFit.fitWidth, 
+            child: Text("10.999€", style: TextStyle(color: Theme.of(context).colorScheme.tertiary),)
+          ),
+        ),
     );
   }
 }

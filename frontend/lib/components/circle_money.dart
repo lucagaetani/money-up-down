@@ -22,7 +22,7 @@ class _CircleMoney extends State<CircleMoney> {
         child: 
           FittedBox(
             fit: BoxFit.fitWidth, 
-            child: Text("10.999€", style: TextStyle(color: Theme.of(context).colorScheme.tertiary),)
+            child: Text("10.9999999€", style: TextStyle(color: Theme.of(context).colorScheme.tertiary),)
           ),
         ),
     );

@@ -4,15 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:frontend/components/home_page.dart';
 import 'package:frontend/components/settings_page.dart';
 import 'package:frontend/components/theme_provider.dart';
+import 'package:frontend/database/database.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+void main(){
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(
       ChangeNotifierProvider(
         create: (context) => ThemeProvider(),
         child: MyApp(),
       ),
   );
+  DatabaseHelper.instance.database;
 }
 
 class MyApp extends StatelessWidget {

@@ -2,77 +2,102 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:frontend/components/category.dart';
 import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
+import 'package:frontend/database/database.dart';
+
+class AddRowClass {
+  const AddRowClass();
+
+  Future<void> addRow(BuildContext context, String amountController, String descriptionController, String selectedCategory, int valueAddOrRemove, Function updateTotalAmount) async {
+    await DatabaseHelper.instance.insertRow({
+                'amount': double.parse(amountController.replaceAll('€', '').replaceAll(',','.')),
+                'description': descriptionController,
+                'category': selectedCategory,
+                'add_or_remove': valueAddOrRemove,
+                'date': DateTime.now().microsecondsSinceEpoch,
+                'created_at': DateTime.now().microsecondsSinceEpoch,
+    });
+    List<Map<String, dynamic>> totalSum = await DatabaseHelper.instance.getTotalSum();
+    updateTotalAmount(totalSum[0]["Total"] ?? 0);
+    if (context.mounted) Navigator.of(context).pop();
+  }
+}
 
 class AddRemovePage extends StatefulWidget {
   final int valueAddOrRemove;
+  final Function updateTotalAmount;
 
-  AddRemovePage({required this.valueAddOrRemove});
+  AddRemovePage({required this.valueAddOrRemove, required this.updateTotalAmount});
 
   @override
   State createState() => _AddRemovePage();
 }
 
 class _AddRemovePage extends State<AddRemovePage> {
-  int selectedCategoryIndex = -1;
+  String selectedCategory = "";
   bool dark = true;
-  final CurrencyTextInputFormatter _formatter = CurrencyTextInputFormatter(
-    locale: 'eu',
-    decimalDigits: 2,
-    symbol: '€',
+  TextEditingController amountController = TextEditingController(
+    text: CurrencyTextInputFormatter(
+      locale: 'eu',
+      decimalDigits: 2,
+      symbol: '€',
+    ).format('0.00'),
   );
-   @override
+  TextEditingController descriptionController = TextEditingController();
+
+
+  @override
   Widget build(BuildContext context) {
     List<InkWell> categoriesToRemove = [
         InkWell(
         onTap: () {
           setState(() {
-            selectedCategoryIndex = 0;
+            selectedCategory = "Restaurant";
           });
         },
         child: Category(
           title: "Restaurant",
           color: Colors.teal[800],
           icon: Icons.restaurant,
-          border: selectedCategoryIndex == 0 ? Border.all(width: 2.0) : null,
+          border: selectedCategory == "Restaurant" ? Border.all(width: 2.0) : null,
         ),
       ),
       InkWell(
         onTap: () {
           setState(() {
-            selectedCategoryIndex = 1;
+            selectedCategory = "Bills";
           });
         },
         child: Category(
           title: "Bills",
           color: Colors.red[800],
           icon: Icons.payments,
-          border: selectedCategoryIndex == 1 ? Border.all(width: 2.0) : null,
+          border: selectedCategory == "Bills" ? Border.all(width: 2.0) : null,
         ),
       ),
       InkWell(
         onTap: () {
           setState(() {
-            selectedCategoryIndex = 2;
+            selectedCategory = "Clothes";
           });
         },
         child: Category(
           title: "Clothes",
           color: Colors.orange[800],
           icon: Icons.checkroom,
-          border: selectedCategoryIndex == 2 ? Border.all(width: 2.0) : null,
+          border: selectedCategory == "Clothes" ? Border.all(width: 2.0) : null,
         ),
       ),
       InkWell(
         onTap: () {
           setState(() {
-            selectedCategoryIndex = 3;
+            selectedCategory = "Entertainment";
           });
         },
         child: Category(
           title: "Entertainment",
           color: Colors.brown[800],
           icon: Icons.local_bar,
-          border: selectedCategoryIndex == 3 ? Border.all(width: 2.0) : null,
+          border: selectedCategory == "Entertainment" ? Border.all(width: 2.0) : null,
         ),
       ),
     ];
@@ -81,40 +106,40 @@ class _AddRemovePage extends State<AddRemovePage> {
         InkWell(
         onTap: () {
           setState(() {
-            selectedCategoryIndex = 0;
+            selectedCategory = "Salary";
           });
         },
         child: Category(
           title: "Salary",
           color: Colors.teal[800],
           icon: Icons.paid,
-          border: selectedCategoryIndex == 0 ? Border.all(width: 2.0) : null,
+          border: selectedCategory == "Salary" ? Border.all(width: 2.0) : null,
         ),
       ),
       InkWell(
         onTap: () {
           setState(() {
-            selectedCategoryIndex = 1;
+            selectedCategory = "Savings";
           });
         },
         child: Category(
           title: "Savings",
           color: Colors.red[800],
           icon: Icons.savings,
-          border: selectedCategoryIndex == 1 ? Border.all(width: 2.0) : null,
+          border: selectedCategory == "Savings" ? Border.all(width: 2.0) : null,
         ),
       ),
       InkWell(
         onTap: () {
           setState(() {
-            selectedCategoryIndex = 2;
+            selectedCategory = "Free entry";
           });
         },
         child: Category(
           title: "Free entry",
           color: Colors.orange[800],
           icon: Icons.redeem,
-          border: selectedCategoryIndex == 2 ? Border.all(width: 2.0) : null,
+          border: selectedCategory == "Free entry" ? Border.all(width: 2.0) : null,
         ),
       ),
     ];
@@ -125,7 +150,7 @@ class _AddRemovePage extends State<AddRemovePage> {
         actions: [
           ElevatedButton(
             onPressed: () {
-
+              const AddRowClass().addRow(context, amountController.text, descriptionController.text, selectedCategory, widget.valueAddOrRemove, widget.updateTotalAmount);
             },
             child: widget.valueAddOrRemove == 0
                 ? Icon(Icons.add)
@@ -138,6 +163,7 @@ class _AddRemovePage extends State<AddRemovePage> {
           Padding(
             padding: const EdgeInsets.all(20.0),
             child: TextFormField(
+              controller: amountController,
               decoration: const InputDecoration(
                 border: UnderlineInputBorder(),
                 labelText: 'Amount',
@@ -149,13 +175,13 @@ class _AddRemovePage extends State<AddRemovePage> {
                   symbol: '€',
                 ),
               ],
-              initialValue: _formatter.format('0.00'),
               keyboardType: TextInputType.number,
             ),
           ),
           Padding(
             padding: const EdgeInsets.all(20.0),
             child: TextFormField(
+              controller: descriptionController,
               decoration: const InputDecoration(
                 border: UnderlineInputBorder(),
                 labelText: 'Description',

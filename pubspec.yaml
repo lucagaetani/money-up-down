@@ -1,0 +1,30 @@
+name: money_up_down
+description: "Manage your money smarter!"
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.8.1
+
+dependencies:
+  flutter:
+    sdk: flutter
+  provider: ^6.1.1
+  drift: ^2.13.0
+  sqlite3_flutter_libs: ^0.5.18
+  path_provider: ^2.1.1
+  path: ^1.8.3
+  fl_chart: ^0.65.0
+  intl: ^0.18.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  drift_dev: ^2.13.0
+  build_runner: ^2.4.6
+  flutter_lints: ^5.0.0
+
+flutter:
+
+  uses-material-design: true

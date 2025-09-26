@@ -1,6 +1,6 @@
-# money_app_down
+# money_up_down
 
-A new Flutter project.
+Manage your money smarter!
 
 ## Getting Started
 

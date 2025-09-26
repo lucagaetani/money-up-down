@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => AppProvider(db: db),
       child: MaterialApp(
-        title: 'Expense Tracker',
+        title: 'Money Up Down',
         theme: ThemeData(
           primarySwatch: Colors.blue,
           useMaterial3: true,

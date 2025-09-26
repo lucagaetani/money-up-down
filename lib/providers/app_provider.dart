@@ -1,35 +1,55 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-import '../database/database.dart';
+import '../database/database.dart'; // Import this
 
 class AppProvider extends ChangeNotifier {
   final AppDatabase db;
   DateTime selectedMonth = DateTime.now();
   Stream<List<TransactionItem>>? _transactionStream;
 
-  AppProvider({required this.db});
+  // --- Theme State ---
+  bool _isDarkMode = false;
+  bool get isDarkMode => _isDarkMode;
+
+  AppProvider({required this.db}) {
+    _loadTheme(); // Load saved theme preference on startup
+  }
+
+  // Method to load theme preference from shared_preferences
+  Future<void> _loadTheme() async {
+    final prefs = await SharedPreferences.getInstance();
+    _isDarkMode = prefs.getBool('isDarkMode') ?? false; // Default to light mode
+    notifyListeners();
+  }
+
+  // Method to toggle theme and save the preference
+  Future<void> toggleTheme() async {
+    _isDarkMode = !_isDarkMode;
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('isDarkMode', _isDarkMode);
+    notifyListeners();
+  }
+  // --- End Theme State ---
 
   Stream<List<TransactionItem>> get transactionStream {
-    // Only create a new stream if the month has changed
     _transactionStream ??= db.watchTransactionsInMonth(selectedMonth);
     return _transactionStream!;
   }
 
   void changeMonth(DateTime newMonth) {
     selectedMonth = newMonth;
-    // Create a new stream for the new month
     _transactionStream = db.watchTransactionsInMonth(selectedMonth);
-    notifyListeners(); // Notify listeners to rebuild and get the new stream
+    notifyListeners();
   }
 
   Future<void> addTransaction(TransactionsCompanion entry) async {
     await db.insertTransaction(entry);
-    // The stream will automatically update the UI, no need to call notifyListeners() here.
   }
 
   Future<void> addCategory(CategoriesCompanion entry) async {
     await db.insertCategory(entry);
-    notifyListeners(); // Notify if you have a UI that lists categories
+    notifyListeners();
   }
 
   Future<List<Category>> getAllCategories() {

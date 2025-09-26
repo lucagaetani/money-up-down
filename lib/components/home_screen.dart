@@ -3,10 +3,13 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../database/database.dart';
 import '../providers/app_provider.dart';
+import '../screens/screens_screen.dart';
 import '../widgets/pie_chart_widget.dart';
 import '../widgets/transaction_list.dart';
 
 class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<AppProvider>(context);
@@ -15,6 +18,14 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(DateFormat.yMMMM().format(provider.selectedMonth)),
         actions: [
+          IconButton(
+            icon: Icon(Icons.settings),
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => SettingsScreen()),
+              );
+            },
+          ),
           IconButton(
             icon: Icon(Icons.chevron_left),
             onPressed: () {
@@ -92,7 +103,7 @@ class StatCard extends StatelessWidget {
   final double amount;
   final Color color;
 
-  const StatCard({Key? key, required this.title, required this.amount, required this.color}) : super(key: key);
+  const StatCard({super.key, required this.title, required this.amount, required this.color});
 
   @override
   Widget build(BuildContext context) {
